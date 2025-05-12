@@ -14,3 +14,17 @@ def pregunta_01():
     214
 
     """
+    total = 0
+    with open("./files/input/data.csv", "r") as f:
+        for line in f:
+            #Eliminacion espacios en blanco
+            line = line.strip()
+            #Divide la linea 
+            fields = line.split("\t")
+            #Suma la segunda columna
+            total += int(fields[1])
+    return total
+
+#if __name__ == "__main__":
+    #value = pregunta_01()
+    #print(value)

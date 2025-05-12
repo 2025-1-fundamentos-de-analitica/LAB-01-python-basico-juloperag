@@ -5,6 +5,30 @@ solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
 
+from .util import parse_file_to_dict as pdict
+from itertools import groupby
+
+def load_input(input_directory):
+    #Se carga el archivo y se genera un array de diccionarios por cada linea del mismo
+    array_dir = pdict(input_directory)
+    #Se crea tuplas (letra,numero) por cada fila
+    sequence = []
+    for line in array_dir: 
+        sequence.append((line["col0"], line["col3"], line["col4"]))
+    return sequence
+
+def mapper(sequence):
+    """Mapper"""
+    #Se queda solamente con los elementos categoricos de la columna 5
+    return [(key, seq_1, [value.split(":")[0] for value in seq_2]) for key, seq_1, seq_2 in sequence]
+
+def reducer(sequence):
+    """Reducer"""
+    result = []
+    #Se calcula la cantidad de elementos
+    for key, seq_1, seq_2 in sequence: 
+        result.append((key, len(seq_1), len(seq_2)))
+    return result
 
 def pregunta_10():
     """
@@ -20,3 +44,11 @@ def pregunta_10():
 
 
     """
+   #Ejecucion de funciones      
+    sequence = load_input("./files/input/data.csv")
+    sequence = mapper(sequence)
+    sequence = reducer(sequence)
+    #Retorno secuencia
+    return sequence
+
+
